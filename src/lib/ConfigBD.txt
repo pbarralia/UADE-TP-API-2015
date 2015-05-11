@@ -1,0 +1,6 @@
+jdbc=jdbc:sqlserver://
+servidor=localhost:1433
+usuario=sa
+password=sa
+conexiones=3
+db=UADE-TP-API-2015
