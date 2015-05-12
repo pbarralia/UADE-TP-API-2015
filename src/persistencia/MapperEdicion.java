@@ -28,14 +28,15 @@ public class MapperEdicion {
 		{
 			Edicion a = (Edicion)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			String script = "INSERT INTO A_Interactivas_01.dbo.Ediciones (TituloTapa, Precio, FechaSalida, Borrado) values (?,?,?,?) ";
-			script += "SELECT scope_identity()";
+			String script = "INSERT INTO [UADE-TP-API-2015].dbo.Ediciones (TituloTapa, Precio, FechaSalida, Borrado) values (?,?,?,?) ";
 			PreparedStatement s = con.prepareStatement(script);
 			//agregar campos
 			s.setString(1,a.getTituloTapa());
 			s.setFloat(2, a.getPrecio());
 			s.setString(3, a.getFechaSalida());
 			s.setBoolean(4, a.isBorrado());
+			s.executeQuery();
+			script = "SELECT MAX(codigo) FROM [UADE-TP-API-2015].dbo.Ediciones";
 			ResultSet result = s.executeQuery();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 			result.next();
