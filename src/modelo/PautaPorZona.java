@@ -4,6 +4,10 @@ import java.util.Vector;
 
 import vista.PautaView;
 
+/*o	Pauta por zona: se prioriza la colocación de ejemplares a
+ *  vendedores cuya ubicación coincida con la zona determinada.
+ *  */
+
 public class PautaPorZona extends PautaColocacion {
 	private String zona;
 
@@ -20,7 +24,10 @@ public class PautaPorZona extends PautaColocacion {
 		this.zona = zona;
 	}
 
-	public int obtenerCarga(Vendedor ven, Vector<Colocacion> col) {
+	public int obtenerCarga(Vendedor vendedor, Vector<Colocacion> col) {
+		Vector<ItemColocacion> ic = vendedor.getItemsColocaciones();
+		if (zona.compareTo(vendedor.getZona())==0)
+			return  ic.elementAt(ic.size()).getColocados();
 		return 0;
 	}
 
