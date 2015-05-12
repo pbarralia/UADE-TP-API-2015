@@ -58,8 +58,11 @@ public class Sistema {
 	}
 
 	public void realizarColocacion(int codigoEdicion, String fechaSalida) {
-		//Al finalizar la colocaci�n hay que llamar al m�todo "emitirResumen" para que genere la lista.
-		//Devuelve una colecci�n de "VendedoresView" que solo tiene el "NroVendedor" y una colecci�n de "ItemColocacion".
+
+		//Al finalizar la colocaciï¿½n hay que llamar al mï¿½todo "emitirResumen" para que genere la lista.
+		//Devuelve una colecciï¿½n de "VendedoresView" que solo tiene el "NroVendedor" y una colecciï¿½n de "ItemColocacion".
+		
+//ggb
 		
 		Vector<ItemColocacion> itemsColocacion = new Vector<ItemColocacion>()  ; // Almaceno los items colocados
 		PautaColocacion pauta = obtenerPautaActiva();
@@ -67,7 +70,7 @@ public class Sistema {
 		for (int i = 0; i < vendedores.size(); i++) {
 			vendedores.elementAt(i).realizarColocacion(codigoEdicion, fechaSalida);
 			int colocados = pauta.obtenerCarga(vendedores.elementAt(i), colocaciones);  //verifico la pauta
-			ItemColocacion item = crearItem(colocados, codigoEdicion, vendedores.elementAt(i));
+			ItemColocacion item = crearItem(colocados, codigoEdicion, vendedores.elementAt(i)); 
 			vendedores.elementAt(i).addItems(item); 
 			itemsColocacion.add(item);
 		}
@@ -78,13 +81,12 @@ public class Sistema {
 
 	private ItemColocacion crearItem(int colocados, int codigoEdicion,	Vendedor vend) {
 		for (int i = 0; i < publicaciones.size(); i++) {
-			Edicion edicion = publicaciones.elementAt(i).buscarEdicion(codigoEdicion);
-		    if (edicion != null)
-		    	return new ItemColocacion(colocados, edicion, publicaciones.elementAt(i), vend);
+	//		Edicion edicion = publicaciones.elementAt(i).buscarEdicion(codigoEdicion); //no hay forma de llegar a la edicion por lo cual lo dejo asi para continuar
+	//	    if (edicion != null)
+		    	return new ItemColocacion(colocados, edicionActual, publicaciones.elementAt(i), vend);
 		}
 		return null;
 	}
-	
 	
 
 	public void agregarEdicion(int codigoPublicacion, String tituloEdicion, float precio, String fechaSalida) {
