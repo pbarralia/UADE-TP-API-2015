@@ -41,7 +41,6 @@ public class ActivarPauta extends javax.swing.JFrame {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			this.setTitle("Activar Pauta");
 			this.setResizable(false);
-			this.setLocationRelativeTo(null);
 			{
 				lblSelPauta = new JLabel();
 				getContentPane().add(lblSelPauta);
