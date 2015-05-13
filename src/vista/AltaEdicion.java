@@ -1,36 +1,42 @@
 package vista;
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.SwingUtilities;
+import controlador.Sistema;
 
+
+/**
+* This code was edited or generated using CloudGarden's Jigloo
+* SWT/Swing GUI Builder, which is free for non-commercial
+* use. If Jigloo is being used commercially (ie, by a corporation,
+* company or business for any purpose whatever) then you
+* should purchase a license for each developer using Jigloo.
+* Please visit www.cloudgarden.com for details.
+* Use of Jigloo implies acceptance of these licensing terms.
+* A COMMERCIAL LICENSE HAS NOT BEEN PURCHASED FOR
+* THIS MACHINE, SO JIGLOO OR THIS CODE CANNOT BE USED
+* LEGALLY FOR ANY CORPORATE OR COMMERCIAL PURPOSE.
+*/
 @SuppressWarnings("serial")
 public class AltaEdicion extends javax.swing.JFrame {
 	private JButton BAlta;
 	private JLabel jLTitulo;
-	private JTextField jTFecha;
+	private JTextField jTDia;
+	private JTextField jTAnio;
+	private JLabel jLabel1;
+	private JTextField jTMes;
+	private JLabel jLBarra1;
 	private JTextField jTPrecio;
 	private JTextField jTTitulo;
 	private JTextField jTCodigoPub;
 	private JLabel jLFecha;
 	private JLabel jLPrecio;
 	private JLabel jLCodigoPub;
-
-	/**
-	* Auto-generated main method to display this JFrame
-	*/
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				AltaEdicion inst = new AltaEdicion();
-				inst.setLocationRelativeTo(null);
-				inst.setVisible(true);
-			}
-		});
-	}
 	
 	public AltaEdicion() {
 		super();
@@ -40,11 +46,9 @@ public class AltaEdicion extends javax.swing.JFrame {
 	private void initGUI() {
 		try {
 			
-			this.setVisible(true);
 			this.setTitle("Alta de Edicion");
 			this.setLocation(500, 500);
 			
-			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			getContentPane().setLayout(null);
 			{
 				BAlta = new JButton();
@@ -52,14 +56,15 @@ public class AltaEdicion extends javax.swing.JFrame {
 				BAlta.setText("Ingresar");
 				BAlta.setBounds(143, 186, 93, 28);
 				BAlta.addActionListener(new ActionListener() {
+					@Override
 					public void actionPerformed(ActionEvent evt) {
 						System.out.println("BAlta.actionPerformed, event="+evt);
-						/*int codigoPub = Integer.parseInt(jTCodigoPub.getText());
+						int codigoPub = Integer.parseInt(jTCodigoPub.getText());
 						String tituloEdicion = jTTitulo.getText();
 						float precio = Float.parseFloat(jTPrecio.getText());
-						String fecha = jTFecha.getText();
+						String fecha = jTDia.getText()+jTMes.getText()+jTAnio.getText();
 						Sistema.getControlador().agregarEdicion(codigoPub, tituloEdicion, precio, fecha);
-						*/setVisible(false);
+						setVisible(false);
 					}
 				});
 			}
@@ -103,9 +108,34 @@ public class AltaEdicion extends javax.swing.JFrame {
 				jTPrecio.setBounds(246, 95, 124, 28);
 			}
 			{
-				jTFecha = new JTextField();
-				getContentPane().add(jTFecha);
-				jTFecha.setBounds(246, 135, 124, 28);
+				jLBarra1 = new JLabel();
+				getContentPane().add(jLBarra1);
+				jLBarra1.setText("/");
+				jLBarra1.setBounds(275, 132, 16, 33);
+			}
+			{
+				jTMes = new JTextField();
+				getContentPane().add(jTMes);
+				jTMes.setBounds(283, 135, 33, 28);
+				jTMes.setText("mm");
+			}
+			{
+				jLabel1 = new JLabel();
+				getContentPane().add(jLabel1);
+				jLabel1.setText("/");
+				jLabel1.setBounds(317, 132, 16, 33);
+			}
+			{
+				jTAnio = new JTextField();
+				getContentPane().add(jTAnio);
+				jTAnio.setBounds(326, 135, 39, 28);
+				jTAnio.setText("aaaa");
+			}
+			{
+				jTDia = new JTextField();
+				getContentPane().add(jTDia);
+				jTDia.setText("dd");
+				jTDia.setBounds(247, 135, 24, 28);
 			}
 			pack();
 			setSize(400, 300);

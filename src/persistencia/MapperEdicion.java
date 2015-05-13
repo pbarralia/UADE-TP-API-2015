@@ -30,7 +30,6 @@ public class MapperEdicion {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			String script = "INSERT INTO [UADE-TP-API-2015].dbo.Ediciones (TituloTapa, Precio, FechaSalida, Borrado) values (?,?,?,?) ";
 			PreparedStatement s = con.prepareStatement(script);
-			//agregar campos
 			s.setString(1,a.getTituloTapa());
 			s.setFloat(2, a.getPrecio());
 			s.setString(3, a.getFechaSalida());

@@ -1,6 +1,8 @@
 package modelo;
 
 import java.util.Vector;
+
+import persistencia.MapperPublicacion;
 import vista.EdicionView;
 
 public abstract class Publicacion {
@@ -118,6 +120,8 @@ public abstract class Publicacion {
 		Edicion edicionNueva = new Edicion(tituloEdicion, precio, fechaSalida);
 
 		ediciones.add(edicionNueva.getCodigoEdicion(), edicionNueva);
+		
+		MapperPublicacion.getInstancia().agregarRelacionEdicion(this.codigo, edicionNueva.getCodigoEdicion());
 	}
 
 	public Edicion tenesEdicion (int codEd){
