@@ -58,63 +58,40 @@ public class Sistema {
 		return edicionActual;
 	}
 
-	public void realizarColocacion(int codigoEdicion, String fechaSalida) {
+	
+	public Vector<ItemColocacionView> mostrarColocacion() {
 
-		// Al finalizar la colocaciï¿½n hay que llamar al mï¿½todo
-		// "emitirResumen" para que genere la lista.
-		// Devuelve una colecciï¿½n de "VendedoresView" que solo tiene el
-		// "NroVendedor" y una colecciï¿½n de "ItemColocacion".
+		Vector<ItemColocacionView> itemsColocacionView = new Vector<ItemColocacionView>(); // Almaceno items
 
-		// ggb
+		for (int i = 0; i < vendedores.size(); i++) {
+			
+			int colocados = obtenerPautaActiva().obtenerCarga(vendedores.elementAt(i),	colocaciones); // verifico la pauta
+			ItemColocacion item = new ItemColocacion(colocados, edicionActual, publicacionActual, vendedores.elementAt(i));
+			itemsColocacionView.add(item.obtenerVista());
+		}
+		return itemsColocacionView;
+	}
+	
+	
+	public void realizarColocacion() {
 
-		Vector<ItemColocacion> itemsColocacion = new Vector<ItemColocacion>(); // Almaceno
-																				// los
-																				// items
-																				// colocados
+
+		Vector<ItemColocacion> itemsColocacion = new Vector<ItemColocacion>(); // Almaceno items
 		PautaColocacion pauta = obtenerPautaActiva();
 
 		for (int i = 0; i < vendedores.size(); i++) {
-			vendedores.elementAt(i).realizarColocacion(codigoEdicion,
-					fechaSalida);
-			int colocados = pauta.obtenerCarga(vendedores.elementAt(i),
-					colocaciones); // verifico la pauta
-			ItemColocacion item = crearItem(colocados, codigoEdicion,
-					vendedores.elementAt(i));
+			vendedores.elementAt(i).realizarColocacion(edicionActual.getCodigoEdicion(), edicionActual.getFechaSalida());
+			int colocados = pauta.obtenerCarga(vendedores.elementAt(i),	colocaciones); // verifico la pauta
+			ItemColocacion item = new ItemColocacion(colocados, edicionActual, publicacionActual, vendedores.elementAt(i));
 			vendedores.elementAt(i).addItems(item);
 			itemsColocacion.add(item);
 		}
 
-		Colocacion c = new Colocacion(itemsColocacion, fechaSalida); // Por cada
-																		// edicion
-																		// y
-																		// fecha
-																		// voy a
-																		// tener
-																		// una
-																		// colocacion
-																		// con
-																		// todos
-																		// los
-																		// items
-																		// en
-																		// estado
-																		// false
+		Colocacion c = new Colocacion(itemsColocacion, edicionActual.getFechaSalida()); 
+		// Por cada	// edicion// y// fecha// voy a// tener// una// colocacion// con// todos// los// items// en// estado// false
 		colocaciones.add(c);
 	}
 
-	private ItemColocacion crearItem(int colocados, int codigoEdicion,
-			Vendedor vend) {
-		for (int i = 0; i < publicaciones.size(); i++) {
-			// Edicion edicion =
-			// publicaciones.elementAt(i).buscarEdicion(codigoEdicion); //no hay
-			// forma de llegar a la edicion por lo cual lo dejo asi para
-			// continuar
-			// if (edicion != null)
-			return new ItemColocacion(colocados, edicionActual,
-					publicaciones.elementAt(i), vend);
-		}
-		return null;
-	}
 
 	public void agregarEdicion(int codigoPublicacion, String tituloEdicion,
 			float precio, String fechaSalida) {
