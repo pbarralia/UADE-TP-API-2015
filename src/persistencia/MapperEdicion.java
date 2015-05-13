@@ -68,29 +68,32 @@ public class MapperEdicion {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public Edicion getByCodigo(Connection c, int codigo) {
 		try {
+			boolean conexionProvista = false;
 			Connection con;
+
 			if (c != null) {
 				con = c;
+				conexionProvista = true;
 			} else {
 				con = PoolConnection.getPoolConnection().getConnection();
 			}
 
-			PreparedStatement s = c.prepareStatement("select * from Ediciones");
+			PreparedStatement s = c
+					.prepareStatement("select * from Ediciones where codigo = ?");
+
+			s.setInt(1, codigo);
 
 			ResultSet result = s.executeQuery();
 
-			Edicion edicion = null;
+			result.next();
+			Edicion edicion = new Edicion(result.getInt(1),
+					result.getString(2), result.getFloat(3),
+					result.getString(4),
+					result.getInt(5) == Integer.parseInt("1"));
 
-			while (result.next()) {
-				edicion = new Edicion(result.getInt(1), result.getString(2),
-						result.getFloat(3), result.getString(4),
-						result.getInt(5) == Integer.parseInt("1"));
-			}
-
-			if (c == null) {
+			if (!conexionProvista) {
 				PoolConnection.getPoolConnection().realeaseConnection(con);
 			}
 

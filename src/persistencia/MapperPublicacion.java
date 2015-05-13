@@ -76,6 +76,8 @@ public class MapperPublicacion {
 							paisDeOrigen, new Vector<Edicion>());
 				}
 
+				publicacion.setEdiciones(selectEdiciones(codigo, c));
+
 				publicaciones.add(publicacion);
 			}
 			PoolConnection.getPoolConnection().realeaseConnection(c);
@@ -86,25 +88,25 @@ public class MapperPublicacion {
 		return null;
 	}
 
-	// private Vector<Edicion> selectEdiciones(int codigo, Connection c) {
-	// try {
-	// Vector<Edicion> ediciones = new Vector<Edicion>();
-	// PreparedStatement s = c
-	// .prepareStatement("Select * from PublicacionEdicion WHERE Publicacion = ?");
-	//
-	// s.setInt(1, codigo);
-	//
-	// ResultSet result = s.executeQuery();
-	// while (result.next()) {
-	// int codEdicion = result.getInt(2);
-	//
-	// ediciones.add(MapperEdicion.getInstancia().getByCodigo(c,
-	// codEdicion));
-	// }
-	// return ediciones;
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// return null;
-	// }
+	private Vector<Edicion> selectEdiciones(int codPublicacion, Connection c) {
+		try {
+			Vector<Edicion> ediciones = new Vector<Edicion>();
+			PreparedStatement s = c
+					.prepareStatement("Select * from PublicacionEdicion WHERE Publicacion = ?");
+
+			s.setInt(1, codPublicacion);
+
+			ResultSet result = s.executeQuery();
+			while (result.next()) {
+				int codEdicion = result.getInt(2);
+
+				ediciones.add(MapperEdicion.getInstancia().getByCodigo(c,
+						codEdicion));
+			}
+			return ediciones;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
