@@ -77,7 +77,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
 						mItemAltaEd.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent evt) {
 								// System.out.println("mItemAltaEd.actionPerformed, event="+evt);
-								new AltaEdicion();
+								AltaEdicion vista = new AltaEdicion();
+								vista.setLocationRelativeTo(null);
+								vista.setVisible(true);
 							}
 						});
 					}

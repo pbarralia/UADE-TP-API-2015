@@ -119,40 +119,42 @@ public abstract class Publicacion {
 			String fechaSalida) {
 		Edicion edicionNueva = new Edicion(tituloEdicion, precio, fechaSalida);
 
-		ediciones.add(edicionNueva.getCodigoEdicion(), edicionNueva);
-		
-		MapperPublicacion.getInstancia().agregarRelacionEdicion(this.codigo, edicionNueva.getCodigoEdicion());
+		ediciones.add(edicionNueva);
+
+		MapperPublicacion.getInstancia().agregarRelacionEdicion(this.codigo,
+				edicionNueva.getCodigoEdicion());
 	}
 
-	public Edicion tenesEdicion (int codEd){
-		Edicion e;
-		return e = buscarEdicion(codEd);
+	public Edicion tenesEdicion(int codEd) {
+		return buscarEdicion(codEd);
 	}
-	
-	public EdicionView getEdicionView(Edicion ed){
+
+	public EdicionView getEdicionView(Edicion ed) {
 		return ed.getView();
 	}
-	
+
 	private Edicion buscarEdicion(int codigoEdicion) {
-		for(int i = 0; i < ediciones.size(); i++){
-			//JOAQUIN: para mi no es necesario el sosEdicion
-			//Pablo : podemos hacer la busqueda por el codigo de la edicion directamente
-			if(ediciones.elementAt(i).getCodigoEdicion() == codigoEdicion)
-				//JOAQUIN: modifique para que solo busque las ediciones no borradas
+		for (int i = 0; i < ediciones.size(); i++) {
+			// JOAQUIN: para mi no es necesario el sosEdicion
+			// Pablo : podemos hacer la busqueda por el codigo de la edicion
+			// directamente
+			if (ediciones.elementAt(i).getCodigoEdicion() == codigoEdicion)
+				// JOAQUIN: modifique para que solo busque las ediciones no
+				// borradas
 				// Pablo estoy deacuerdo
-				if(ediciones.elementAt(i).isBorrado()==false){
+				if (ediciones.elementAt(i).isBorrado() == false) {
 					return ediciones.elementAt(i);
-				}	
+				}
 		}
 		return null;
 	}
-	
+
 	public void bajaLogica() {
 		edicionActual.setBorrado(true);
 	}
-	
-	
-	public void modificarDatosEdicion(Edicion edicionActual, String tituloTapa, float precio, String fechaSalida) {
+
+	public void modificarDatosEdicion(Edicion edicionActual, String tituloTapa,
+			float precio, String fechaSalida) {
 		edicionActual.modificarDatos(tituloTapa, precio, fechaSalida);
 	}
 }

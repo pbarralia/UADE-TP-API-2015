@@ -1,11 +1,11 @@
 package controlador;
 
-
 import java.util.Date;
 import java.util.Vector;
 
 import persistencia.MapperItemColocacion;
 import persistencia.MapperPauta;
+import persistencia.MapperPublicacion;
 import modelo.Colocacion;
 import modelo.Edicion;
 import modelo.ItemColocacion;
@@ -29,7 +29,7 @@ public class Sistema {
 
 	private Sistema() {
 		vendedores = new Vector<Vendedor>();
-		publicaciones = new Vector<Publicacion>();
+		publicaciones = MapperPublicacion.getInstancia().selectAll();
 		pautasColocacion = MapperPauta.getInstancia().selectAll();
 		colocaciones = new Vector<Colocacion>();
 
@@ -48,7 +48,7 @@ public class Sistema {
 	public void setEdicionActual(Edicion edicionActual) {
 		this.edicionActual = edicionActual;
 	}
-	
+
 	public Publicacion getPublicacionActual() {
 		return publicacionActual;
 	}
@@ -59,51 +59,79 @@ public class Sistema {
 
 	public void realizarColocacion(int codigoEdicion, String fechaSalida) {
 
-		//Al finalizar la colocaciï¿½n hay que llamar al mï¿½todo "emitirResumen" para que genere la lista.
-		//Devuelve una colecciï¿½n de "VendedoresView" que solo tiene el "NroVendedor" y una colecciï¿½n de "ItemColocacion".
-		
-//ggb
-		
-		Vector<ItemColocacion> itemsColocacion = new Vector<ItemColocacion>()  ; // Almaceno los items colocados
+		// Al finalizar la colocaciï¿½n hay que llamar al mï¿½todo
+		// "emitirResumen" para que genere la lista.
+		// Devuelve una colecciï¿½n de "VendedoresView" que solo tiene el
+		// "NroVendedor" y una colecciï¿½n de "ItemColocacion".
+
+		// ggb
+
+		Vector<ItemColocacion> itemsColocacion = new Vector<ItemColocacion>(); // Almaceno
+																				// los
+																				// items
+																				// colocados
 		PautaColocacion pauta = obtenerPautaActiva();
-		
+
 		for (int i = 0; i < vendedores.size(); i++) {
-			vendedores.elementAt(i).realizarColocacion(codigoEdicion, fechaSalida);
-			int colocados = pauta.obtenerCarga(vendedores.elementAt(i), colocaciones);  //verifico la pauta
-			ItemColocacion item = crearItem(colocados, codigoEdicion, vendedores.elementAt(i)); 
-			vendedores.elementAt(i).addItems(item); 
+			vendedores.elementAt(i).realizarColocacion(codigoEdicion,
+					fechaSalida);
+			int colocados = pauta.obtenerCarga(vendedores.elementAt(i),
+					colocaciones); // verifico la pauta
+			ItemColocacion item = crearItem(colocados, codigoEdicion,
+					vendedores.elementAt(i));
+			vendedores.elementAt(i).addItems(item);
 			itemsColocacion.add(item);
 		}
-		
-		Colocacion c = new Colocacion(itemsColocacion, fechaSalida); // Por cada edicion y fecha voy a tener una colocacion con todos los items en estado false
+
+		Colocacion c = new Colocacion(itemsColocacion, fechaSalida); // Por cada
+																		// edicion
+																		// y
+																		// fecha
+																		// voy a
+																		// tener
+																		// una
+																		// colocacion
+																		// con
+																		// todos
+																		// los
+																		// items
+																		// en
+																		// estado
+																		// false
 		colocaciones.add(c);
 	}
 
-	private ItemColocacion crearItem(int colocados, int codigoEdicion,	Vendedor vend) {
+	private ItemColocacion crearItem(int colocados, int codigoEdicion,
+			Vendedor vend) {
 		for (int i = 0; i < publicaciones.size(); i++) {
-	//		Edicion edicion = publicaciones.elementAt(i).buscarEdicion(codigoEdicion); //no hay forma de llegar a la edicion por lo cual lo dejo asi para continuar
-	//	    if (edicion != null)
-		    	return new ItemColocacion(colocados, edicionActual, publicaciones.elementAt(i), vend);
+			// Edicion edicion =
+			// publicaciones.elementAt(i).buscarEdicion(codigoEdicion); //no hay
+			// forma de llegar a la edicion por lo cual lo dejo asi para
+			// continuar
+			// if (edicion != null)
+			return new ItemColocacion(colocados, edicionActual,
+					publicaciones.elementAt(i), vend);
 		}
 		return null;
 	}
-	
 
-	public void agregarEdicion(int codigoPublicacion, String tituloEdicion, float precio, String fechaSalida) {
+	public void agregarEdicion(int codigoPublicacion, String tituloEdicion,
+			float precio, String fechaSalida) {
 		try {
-			publicaciones.elementAt(codigoPublicacion).agregarEdicion(tituloEdicion, precio, fechaSalida);
-			
+			buscarPublicacion(codigoPublicacion).agregarEdicion(tituloEdicion,
+					precio, fechaSalida);
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void borrarEdicion(int codPub, int codEd) {
-	
+
 		this.setPublicacionActual(this.buscarPublicacion(codPub));
-				this.validarEdicion(codPub, codEd);
+		this.validarEdicion(codPub, codEd);
 	}
-	
+
 	public void bajaLogica() {
 		this.publicacionActual.bajaLogica();
 		this.setEdicionActual(null);
@@ -117,7 +145,6 @@ public class Sistema {
 		}
 		return null;
 	}
-
 
 	public Vector<PautaView> obtenerPautas() {
 		Vector<PautaView> vistaPautas = new Vector<PautaView>();
@@ -143,47 +170,46 @@ public class Sistema {
 		}
 		return null;
 	}
-	
 
-	
-	private Vector <VendedorView> emitirResumen (Date fechaSalida){
+	private Vector<VendedorView> emitirResumen(Date fechaSalida) {
 		Vector<VendedorView> resumen = new Vector<VendedorView>();
 		VendedorView resumenIndividual;
-		for (Vendedor v: vendedores){
+		for (Vendedor v : vendedores) {
 			resumenIndividual = v.dameResumen(fechaSalida);
 			resumen.add(resumenIndividual);
 		}
 		return resumen;
 	}
-	
-	public void updateItemColocacion(int codigoColocacion, ItemColocacionView item){
+
+	public void updateItemColocacion(int codigoColocacion,
+			ItemColocacionView item) {
 		MapperItemColocacion mapper = new MapperItemColocacion();
 		mapper.update(codigoColocacion, item);
 	}
 
- 	public PautaView buscarPautaActiva() {
+	public PautaView buscarPautaActiva() {
 		for (int i = 0; i < pautasColocacion.size(); i++) {
 			if (pautasColocacion.elementAt(i).estasActiva()) {
 				return pautasColocacion.elementAt(i).obtenerVista();
 			}
 		}
- 		return null;
- 	}
+		return null;
+	}
 
 	public void desactivarPauta(int codigo) {
-			PautaColocacion p = buscarPauta(codigo);
-			if (p != null) {
-				p.setActiva(false);
-				MapperPauta.getInstancia().update(p);
-		 	}
+		PautaColocacion p = buscarPauta(codigo);
+		if (p != null) {
+			p.setActiva(false);
+			MapperPauta.getInstancia().update(p);
+		}
 	}
-	
-	public EdicionView validarEdicion(int codPub, int codEd){
+
+	public EdicionView validarEdicion(int codPub, int codEd) {
 		EdicionView ev = null;
 		Publicacion p = buscarPublicacion(codPub);
-		if(p!=null){
+		if (p != null) {
 			Edicion ed = p.tenesEdicion(codEd);
-			if(ed!=null){
+			if (ed != null) {
 				ev = p.getEdicionView(ed);
 				setEdicionActual(ed);
 				setPublicacionActual(p);
@@ -191,25 +217,25 @@ public class Sistema {
 		}
 		return ev;
 	}
-	
-	
-	private Publicacion buscarPublicacion (int codPub){
-		Publicacion p = null;
-		for(int i=0; i<publicaciones.size(); i++){
-			if(publicaciones.elementAt(i).getCodigo()==codPub){
-				p=publicaciones.elementAt(i);
+
+	private Publicacion buscarPublicacion(int codPub) {
+		for (int i = 0; i < publicaciones.size(); i++) {
+			if (publicaciones.elementAt(i).getCodigo() == codPub) {
+				return publicaciones.elementAt(i);
 			}
 		}
-		return p;
+		return null;
 	}
-	
-	public void modificarDatosEdicion(Edicion edicionActual, String tituloTapa, float precio, String fechaSalida){
-		publicacionActual.modificarDatosEdicion(edicionActual, tituloTapa, precio, fechaSalida);
+
+	public void modificarDatosEdicion(Edicion edicionActual, String tituloTapa,
+			float precio, String fechaSalida) {
+		publicacionActual.modificarDatosEdicion(edicionActual, tituloTapa,
+				precio, fechaSalida);
 		setPublicacionActual(null);
 		setEdicionActual(null);
 	}
-	
-	public void cancelarModificarEdicion(){
+
+	public void cancelarModificarEdicion() {
 		setPublicacionActual(null);
 		setEdicionActual(null);
 	}
