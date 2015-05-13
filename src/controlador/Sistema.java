@@ -3,19 +3,20 @@ package controlador;
 import java.util.Date;
 import java.util.Vector;
 
-import persistencia.MapperItemColocacion;
-import persistencia.MapperPauta;
-import persistencia.MapperPublicacion;
 import modelo.Colocacion;
 import modelo.Edicion;
 import modelo.ItemColocacion;
 import modelo.PautaColocacion;
 import modelo.Publicacion;
 import modelo.Vendedor;
+import persistencia.MapperItemColocacion;
+import persistencia.MapperPauta;
+import persistencia.MapperPublicacion;
+import persistencia.MapperVendedor;
 import vista.EdicionView;
 import vista.ItemColocacionView;
-import vista.VendedorView;
 import vista.PautaView;
+import vista.VendedorView;
 
 public class Sistema {
 
@@ -28,7 +29,7 @@ public class Sistema {
 	private Edicion edicionActual;
 
 	private Sistema() {
-		vendedores = new Vector<Vendedor>();
+		vendedores = MapperVendedor.getInstancia().selectAll();
 		publicaciones = MapperPublicacion.getInstancia().selectAll();
 		pautasColocacion = MapperPauta.getInstancia().selectAll();
 		colocaciones = new Vector<Colocacion>();
